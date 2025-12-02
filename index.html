@@ -1,1 +1,933 @@
-404: Not Found
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YOXI HUB</title>
+    <link rel="icon" type="image/png" href="heart.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e60023;
+            --secondary: #ff3c5c;
+            --accent: #ff4d4d;
+            --dark: #0a0a0a;
+            --light: #f8f9fa;
+            --gray: #151515;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --youtube: #ff0000;
+            --glow: 0 0 15px rgba(230, 0, 35, 0.7);
+            --snow: #ffffff;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', 'Segoe UI', 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+        }
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+            position: relative;
+        }
+        .snowflakes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .snowflake {
+            position: absolute;
+            color: var(--snow);
+            font-size: 1.2em;
+            animation: fall linear infinite;
+            opacity: 0.9;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh); }
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            background: radial-gradient(circle at center, #0f1a2e 0%, #0a0000 70%, #000000 100%);
+        }
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: pan-grid 40s linear infinite;
+        }
+        @keyframes pan-grid {
+            from { background-position: 0 0; }
+            to { background-position: 50px 50px; }
+        }
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+        .loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-container {
+            text-align: center;
+            position: relative;
+        }
+        .loader-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+            text-shadow: 0 0 10px rgba(230, 0, 35, 0.5);
+            animation: glowPulse 2s infinite alternate;
+        }
+        .loader-logo span {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(230, 0, 35, 0.9);
+        }
+        .loader-logo::before { content: "❄️"; margin-right: 15px; }
+        .loader-logo::after { content: "❄️"; margin-left: 15px; }
+        @keyframes glowPulse {
+            from { text-shadow: 0 0 10px rgba(230, 0, 35, 0.5); }
+            to { text-shadow: 0 0 30px rgba(230, 0, 35, 0.9); }
+        }
+        .loader-bar {
+            width: 250px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+        .loader-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #00ff88, var(--primary), #ff0080);
+            border-radius: 3px;
+            animation: loadProgress 1.8s ease-in-out;
+        }
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 0.8rem 5%;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            transition: top 0.3s, background 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--light);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(230, 0, 35, 0.5);
+        }
+        .logo span {
+            color: var(--primary);
+            text-shadow: 0 0 15px rgba(230, 0, 35, 0.8);
+        }
+        .lang-switcher {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(20, 20, 20, 0.7);
+            padding: 0.3rem 0.7rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        .lang-btn.active {
+            color: var(--primary);
+            background: rgba(230, 0, 35, 0.2);
+        }
+        nav {
+            display: flex;
+            gap: 1.2rem;
+        }
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 0.4rem 0;
+            font-size: 0.95rem;
+        }
+        nav a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(230, 0, 35, 0.5);
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        nav a:hover::after {
+            width: 100%;
+        }
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 1.5rem 3rem;
+            text-align: center;
+            position: relative;
+        }
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 25px rgba(230, 0, 35, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            letter-spacing: 1px;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        #welcome {
+            position: relative;
+            padding-top: 1.5rem;
+        }
+        #welcome h1 {
+            font-size: 3.2rem;
+            margin-bottom: 1.2rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(230, 0, 35, 0.6);
+            animation: fadeInUp 0.8s ease-out forwards;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            letter-spacing: 2px;
+            line-height: 1.2;
+            position: relative;
+        }
+        #welcome h1::before { content: "❄️"; margin-right: 20px; font-size: 0.9em; }
+        #welcome h1::after { content: "❄️"; margin-left: 20px; font-size: 0.9em; }
+        @media (min-width: 992px) {
+            #welcome h1 { font-size: 5.5rem; }
+            #welcome h1::before, #welcome h1::after { font-size: 1.2em; }
+        }
+        #welcome .subtitle {
+            font-size: 1.3rem;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.3s forwards;
+            opacity: 0;
+            font-weight: 500;
+        }
+        .buttons {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.6s forwards;
+            opacity: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn {
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: var(--glow);
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            min-width: 180px;
+            justify-content: center;
+        }
+        .btn:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(230, 0, 35, 0.5);
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+        }
+        .secret-btn {
+            margin-top: 1.2rem;
+            padding: 0.7rem 1.8rem;
+            background: linear-gradient(45deg, #ff8c00, #ff0080);
+            color: white;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 1.5px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
+            transition: all 0.3s;
+            animation: pulseGlow 2s infinite alternate;
+            min-width: 200px;
+        }
+        .secret-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 0, 128, 0.7);
+        }
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 15px rgba(255, 0, 128, 0.5); }
+            to { box-shadow: 0 0 25px rgba(255, 140, 0, 0.7); }
+        }
+        .scroll-down {
+            position: absolute;
+            bottom: 30px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 2.2rem;
+            animation: bounce 2s infinite;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .scroll-down:hover {
+            color: var(--primary);
+            transform: translateY(-4px);
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        #why { padding: 5rem 1.5rem 4rem; }
+        .reasons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 900px;
+            margin-top: 2rem;
+        }
+        .reason-card {
+            background: var(--gray);
+            padding: 1.8rem 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        .reason-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(230, 0, 35, 0.3);
+        }
+        .reason-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        .reason-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+        .reason-desc {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+        .script-container {
+            background: var(--gray);
+            border-radius: 18px;
+            padding: 2rem;
+            max-width: 850px;
+            width: 95%;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+        .script-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        .script-note {
+            margin: 0.8rem 0 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+        .script-code {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 1.6rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            text-align: left;
+            margin: 1.2rem 0 1.8rem;
+            position: relative;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
+        }
+        .copy-btn {
+            cursor: pointer;
+            margin: 0 auto;
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+        }
+        .copy-btn.copied {
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            box-shadow: 0 5px 15px rgba(0, 176, 155, 0.3);
+        }
+        #games {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+            position: relative;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .game-card {
+            background: rgba(20, 20, 20, 0.6);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 25px rgba(0 trophies0, 0, 0, 0.4);
+            transition: all 0.4s ease;
+        }
+        .game-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 12px 35px rgba(230, 0, 35, 0.3);
+            border-color: var(--primary);
+        }
+        .game-image-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .game-card h3 {
+            padding: 1rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        .scroller-wrapper {
+            display: none;
+        }
+        @media (max-width: 992px) {
+            .games-grid { display: none; }
+            .scroller-wrapper { display: block; }
+        }
+        .scroller-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 100vw;
+            padding: 0 20px;
+            margin-top: 2rem;
+            overflow: visible;
+        }
+        .scroll-btn-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(20, 20, 20, 0.9);
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            color: var(--light);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(230, 0, 35, 0.3);
+            opacity: 0.9;
+        }
+        .scroll-btn-arrow:hover {
+            background: var(--primary);
+            opacity: 1;
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 0 20px rgba(230, 0, 35, 0.5);
+            color: white;
+        }
+        #scroll-left { left: 0; }
+        #scroll-right { right: 0; }
+        .games-scroller {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+            overflow-y: visible;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 15px;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+            position: relative;
+            z-index: 2;
+        }
+        .games-scroller::-webkit-scrollbar { display: none; }
+        .scroller__inner {
+            display: flex;
+            gap: 1.8rem;
+            width: max-content;
+            padding: 10px 10px;
+        }
+        .game-card-scroller {
+            width: 180px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(20, 20, 20, 0.6);
+            border-radius: 16px;
+            padding: 1.2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        .game-card-scroller:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(230, 0, 35, 0.3);
+            border-color: var(--primary);
+        }
+        .faq-container {
+            max-width: 850px;
+            width: 95%;
+            margin-top: 2rem;
+            padding: 0 1rem;
+        }
+        .faq-item {
+            margin-bottom: 1.2rem;
+            border-radius: 14px;
+            background: var(--gray);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+        .faq-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .faq-question {
+            padding: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(20, 20, 20, 0.7);
+            transition: all 0.3s;
+        }
+        .faq-question:hover { background: rgba(30, 30, 30, 0.8); }
+        .faq-item.active .faq-question {
+            color: var(--primary);
+            background: rgba(30, 10, 10, 0.7);
+        }
+        .faq-answer-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            background: rgba(15, 15, 15, 0.8);
+        }
+        .faq-answer {
+            overflow: hidden;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        .faq-answer p {
+            padding: 0 1.5rem 1.5rem;
+            font-size: 1rem;
+        }
+        .faq-item.active .faq-answer-wrapper { grid-template-rows: 1fr; }
+        .faq-question i {
+            transition: transform 0.4s ease;
+            font-size: 1.1rem;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+        footer {
+            padding: 2.5rem 1.5rem 2rem;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--gray), #080808);
+            border-top: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.8rem;
+            margin-bottom: 1.8rem;
+        }
+        .social-links a {
+            color: var(--light);
+            font-size: 1.8rem;
+            transition: all 0.4s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(30, 30, 30, 0.7);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+        }
+        .social-links a:hover {
+            transform: translateY(-6px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(230, 0, 35, 0.4);
+        }
+        .social-links a.telegram:hover { color: #0088cc; background: rgba(0, 136, 204, 0.2); box-shadow: 0 0 18px rgba(0, 136, 204, 0.3); }
+        .social-links a.discord:hover { color: #5865F2; background: rgba(88, 101, 242, 0.2); box-shadow: 0 0 18px rgba(88, 101, 242, 0.3); }
+        .social-links a.youtube:hover { color: var(--youtube); background: rgba(255, 0, 0, 0.2); box-shadow: 0 0 18px rgba(255, 0, 0, 0.3); }
+        .copyright {
+            margin-top: 1.2rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        @media (min-width: 992px) {
+            header { padding: 1.2rem 5%; }
+            .logo { font-size: 2rem; }
+            .section-title { font-size: 3.5rem; }
+            #welcome h1 { font-size: 5.5rem; }
+        }
+        @media (max-width: 767px) {
+            #welcome h1 { font-size: 2.8rem; }
+            .scroll-btn-arrow { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="snowflakes" aria-hidden="true"></div>
+    <div class="background"></div>
+    <canvas id="particle-canvas"></canvas>
+    <div class="grid-bg"></div>
+    <div class="loading">
+        <div class="loader-container">
+            <div class="loader-logo">YOXI<span> HUB</span></div>
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+    <header>
+        <a href="#welcome" class="logo">YOXI<span> HUB</span></a>
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="ru">RU</button>
+        </div>
+        <nav>
+            <a href="#why" data-key="nav_why">Why?</a>
+            <a href="#script" data-key="nav_script">Script</a>
+            <a href="#games" data-key="nav_games">Games</a>
+            <a href="#faq" data-key="nav_faq">FAQ</a>
+        </nav>
+    </header>
+    <main>
+        <section id="welcome">
+            <h1 data-key="hero_title">YOXI HUB</h1>
+            <p class="subtitle" data-key="hero_subtitle">The ultimate free script compatible with most executors and popular games.</p>
+            <div class="buttons">
+                <a href="https://t.me/YomkaMadeIt" target="_blank" class="btn"><i class="fab fa-telegram"></i> <span data-key="btn_telegram">Telegram</span></a>
+                <a href="https://discord.gg/PKdh229jqg" target="_blank" class="btn"><i class="fab fa-discord"></i> <span data-key="btn_discord">Discord</span></a>
+                <a href="https://www.youtube.com/@ItsYomka" target="_blank" class="btn"><i class="fab fa-youtube"></i> <span data-key="btn_youtube">YouTube</span></a>
+                <a href="#script" class="btn"><i class="fas fa-code"></i> <span data-key="btn_get_script">Get Script</span></a>
+            </div>
+            <button class="secret-btn" onclick="window.open('https://www.youtube.com/watch?v=swnVdhCsYBk', '_blank')">DAAAAMMNN</button>
+            <a href="#why" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        <section id="why">
+            <h2 class="section-title reveal" data-key="why_title">Why YOXI HUB?</h2>
+            <div class="reasons-grid">
+                <div class="reason-card reveal"><div class="reason-icon"><i class="fas fa-key"></i></div><h3 class="reason-title" data-key="why_keyless_title">100% Keyless</h3><p class="reason-desc" data-key="why_keyless_desc">No keys, no payments, no bullshit. Just paste and play.</p></div>
+                <div class="reason-card reveal"><div class="reason-icon"><i class="fas fa-sync-alt"></i></div><h3 class="reason-title" data-key="why_auto_title">Auto-Updating</h3><p class="reason-desc" data-key="why_auto_desc">The script is updated quickly, so you always get the latest features.</p></div>
+                <div class="reason-card reveal"><div class="reason-icon"><i class="fas fa-shield-alt"></i></div><h3 class="reason-title" data-key="why_safe_title">Safe & Undetected</h3><p class="reason-desc" data-key="why_safe_desc">Advanced Anti-cheat bypass keep you safe.</p></div>
+                <div class="reason-card reveal"><div class="reason-icon"><i class="fas fa-infinity"></i></div><h3 class="reason-title" data-key="why_all_title">All-in-One</h3><p class="reason-desc" data-key="why_all_desc">One script for all supported games — convenient and fast.</p></div>
+            </div>
+        </section>
+        <section id="script">
+            <h2 class="section-title reveal" data-key="script_title">Get The Script</h2>
+            <div class="script-container reveal">
+                <p class="script-note" data-key="script_note">Single script for all modes — auto-updates included.</p>
+                <div class="script-code" id="script-code">loadstring(game:HttpGet("https://raw.githubusercontent.com/Yomkav2/YOXI-HUB/refs/heads/main/loader",true))()</div>
+                <button class="btn copy-btn" id="copy-btn" onclick="copyScript()"><i class="fas fa-copy"></i> <span data-key="btn_copy_script">Copy Script</span></button>
+            </div>
+            <a href="#games" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        <section id="games">
+            <h2 class="section-title reveal" data-key="games_title">Supported Games</h2>
+            <div class="games-grid reveal">
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9b7b7c8c8f8e4f8b9c8d8e8f9a0b1c2d/768/432/ImagePng');"></div><h3>Forsaken</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3e8f9a0b1c2d3e4f5g6h7i8j9k0l1m2n/768/432/ImagePng');"></div><h3>Evade</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p/768/432/ImagePng');"></div><h3>Bee Swarm Simulator</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u/768/432/ImagePng');"></div><h3>Grow a Garden</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p/768/432/ImagePng');"></div><h3>Dandy's World</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k/768/432/ImagePng');"></div><h3>Grace</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4k5l6m7n8o9p0q1r2s3t4u5v6w7x8y9z/768/432/ImagePng');"></div><h3>Pressure</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-7h8g9f0e1d2c3b4a5z6y7x8w9v0u1t2s/768/432/ImagePng');"></div><h3>Bubble Gum Simulator</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3p4o5i6u7y8t9r0e1w2q3a4s5d6f7g8h/768/432/ImagePng');"></div><h3>Die of Death</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9j8h7g6f5e4d3s2a1q0w9e8r7t6y5u4i/768/432/ImagePng');"></div><h3>Fish It!</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2m3n4b5v6c7x8z9a0s1d2f3g4h5j6k7l/768/432/ImagePng');"></div><h3>Hypershot</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-5t6y7u8i9o0p1q2w3e4r5t6y7u8i9o0p/768/432/ImagePng');"></div><h3>Arsenal</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1f2g3h4j5k6l7z8x9c0v1b2n3m4q5w6e/768/432/ImagePng');"></div><h3>Something Evil Will Happen</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8r9t0y1u2i3o4p5q6w7e8r9t0y1u2i3o/768/432/ImagePng');"></div><h3>Violence District</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4a5b6c7d8e9f0g1h2j3k4l5m6n7o8p9q/768/432/ImagePng');"></div><h3>Murder Mystery 2</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9q8w7e6r5t4y3u2i1o0p9l8k7j6h5g4f/768/432/ImagePng');"></div><h3>Flick</h3></div>
+                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3d4f5g6h7j8k9l0z1x2c3v4b5n6m7p8o/768/432/ImagePng');"></div><h3>NFT Battle</h3></div>
+            </div>
+            <div class="scroller-wrapper reveal">
+                <button class="scroll-btn-arrow" id="scroll-left"><i class="fas fa-chevron-left"></i></button>
+                <div class="games-scroller" id="games-scroller">
+                    <div class="scroller__inner">
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9b7b7c8c8f8e4f8b9c8d8e8f9a0b1c2d/768/432/ImagePng');"></div><h3>Forsaken</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3e8f9a0b1c2d3e4f5g6h7i8j9k0l1m2n/768/432/ImagePng');"></div><h3>Evade</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p/768/432/ImagePng');"></div><h3>Bee Swarm Simulator</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u/768/432/ImagePng');"></div><h3>Grow a Garden</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p/768/432/ImagePng');"></div><h3>Dandy's World</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k/768/432/ImagePng');"></div><h3>Grace</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4k5l6m7n8o9p0q1r2s3t4u5v6w7x8y9z/768/432/ImagePng');"></div><h3>Pressure</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-7h8g9f0e1d2c3b4a5z6y7x8w9v0u1t2s/768/432/ImagePng');"></div><h3>Bubble Gum Simulator</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3p4o5i6u7y8t9r0e1w2q3a4s5d6f7g8h/768/432/ImagePng');"></div><h3>Die of Death</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9j8h7g6f5e4d3s2a1q0w9e8r7t6y5u4i/768/432/ImagePng');"></div><h3>Fish It!</h3></div>
+                        <div class="game-card-scroller"><div class="game június-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2m3n4b5v6c7x8z9a0s1d2f3g4h5j6k7l/768/432/ImagePng');"></div><h3>Hypershot</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-5t6y7u8i9o0p1q2w3e4r5t6y7u8i9o0p/768/432/ImagePng');"></div><h3>Arsenal</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1f2g3h4j5k6l7z8x9c0v1b2n3m4q5w6e/768/432/ImagePng');"></div><h3>Something Evil Will Happen</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8r9t0y1u2i3o4p5q6w7e8r9t0y1u2i3o/768/432/ImagePng');"></div><h3>Violence District</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4a5b6c7d8e9f0g1h2j3k4l5m6n7o8p9q/768/432/ImagePng');"></div><h3>Murder Mystery 2</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9q8w7e6r5t4y3u2i1o0p9l8k7j6h5g4f/768/432/ImagePng');"></div><h3>Flick</h3></div>
+                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3d4f5g6h7j8k9l0z1x2c3v4b5n6m7p8o/768/432/ImagePng');"></div><h3>NFT Battle</h3></div>
+                    </div>
+                </div>
+                <button class="scroll-btn-arrow" id="scroll-right"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <a href="#faq" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
+        </section>
+        <section id="faq">
+            <h2 class="section-title reveal" data-key="faq_title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item reveal"><div class="faq-question" onclick="toggleFaq(this)"><span data-key="faq_q1">What executors does the hub support?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer-wrapper"><div class="faq-answer"><p data-key="faq_a1">We conducted successful tests on: Zenit, Volcano, Terra, Bunni.lol, Seliware, Valex, Potassium, Wave, Velocity, Sirhurt, and Nucleus. All worked stably.</p></div></div></div>
+                <div class="faq-item reveal" style="transition-delay: 0.1s;"><div class="faq-question" onclick="toggleFaq(this)"><span data-key="faq_q2">How secure is your hub?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer-wrapper"><div class="faq-answer"><p data-key="faq_a2">Our hub is 101% safe. It has been tested over time and is trusted by a large community of users.</p></div></div></div>
+                <div class="faq-item reveal" style="transition-delay: 0.2s;"><div class="faq-question" onclick="toggleFaq(this)"><span data-key="faq_q3">What is the risk of getting banned?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer-wrapper"><div class="faq-answer"><p data-key="faq_a3">The risk is minimal. Our hub features a powerful anti-cheat bypass, making the probability of a ban nearly zero.</p></div></div></div>
+                <div class="faq-item reveal" style="transition-delay: 0.3s;"><div class="faq-question" onclick="toggleFaq(this)"><span data-key="faq_q4">Where can I get support or contact you?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer-wrapper"><div class="faq-answer"><p data-key="faq_a4">We have active communities on Discord and Telegram where you can ask questions, get support, or just chat with other users.</p></div></div></div>
+                <div class="faq-item reveal" style="transition-delay: 0.4s;"><div class="faq-question" onclick="toggleFaq(this)"><span data-key="faq_q5">Is your hub keyless?</span><i class="fas fa-chevron-down"></i></div><div class="faq-answer-wrapper"><div class="faq-answer"><p data-key="faq_a5">Yes! Our hub is completely keyless and always will be. No payments, no keys — just free access for everyone.</p></div></div></div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="social-links">
+            <a href="https://t.me/YomkaMadeIt" target="_blank" aria-label="Telegram" class="telegram"><i class="fab fa-telegram"></i></a>
+            <a href="https://discord.gg/PKdh229jqg" target="_blank" aria-label="Discord" class="discord"><i class="fab fa-discord"></i></a>
+            <a href="https://www.youtube.com/@ItsYomka" target="_blank" aria-label="YouTube" class="youtube"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="copyright">© 2025 YOXI HUB ❄️ Happy New Year!</p>
+    </footer>
+    <script>
+        const translations = {
+            en: { hero_title: "YOXI HUB", hero_subtitle: "The ultimate free script compatible with most executors and popular games.", nav_why: "Why?", nav_script: "Script", nav_games: "Games", nav_faq: "FAQ", btn_telegram: "Telegram", btn_discord: "Discord", btn_youtube: "YouTube", btn_get_script: "Get Script", why_title: "Why YOXI HUB?", why_keyless_title: "100% Keyless", why_keyless_desc: "No keys, no payments, no bullshit. Just paste and play.", why_auto_title: "Auto-Updating", why_auto_desc: "The script is updated quickly, so you always get the latest features.", why_safe_title: "Safe & Undetected", why_safe_desc: "Advanced Anti-cheat bypass keep you safe.", why_all_title: "All-in-One", why_all_desc: "One script for all supported games — convenient and fast.", script_title: "Get The Script", script_note: "Single script for all modes — auto-updates included.", btn_copy_script: "Copy Script", games_title: "Supported Games", faq_title: "Frequently Asked Questions", faq_q1: "What executors does the hub support?", faq_a1: "We conducted successful tests on: Zenit, Volcano, Terra, Bunni.lol, Seliware, Valex, Potassium, Wave, Velocity, Sirhurt, and Nucleus. All worked stably.", faq_q2: "How secure is your hub?", faq_a2: "Our hub is 101% safe. It has been tested over time and is trusted by a large community of users.", faq_q3: "What is the risk of getting banned?", faq_a3: "The risk is minimal. Our hub features a powerful anti-cheat bypass, making the probability of a ban nearly zero.", faq_q4: "Where can I get support or contact you?", faq_a4: "We have active communities on Discord and Telegram where you can ask questions, get support, or just chat with other users.", faq_q5: "Is your hub keyless?", faq_a5: "Yes! Our hub is completely keyless and always will be. No payments, no keys — just free access for everyone." },
+            ru: { hero_title: "YOXI HUB", hero_subtitle: "Ультимативный бесплатный скрипт, совместимый с большинством экзекьюторов и популярных игр.", nav_why: "Почему?", nav_script: "Скрипт", nav_games: "Игры", nav_faq: "Вопросы", btn_telegram: "Telegram", btn_discord: "Discord", btn_youtube: "YouTube", btn_get_script: "Получить скрипт", why_title: "Почему YOXI HUB?", why_keyless_title: "Без ключа", why_keyless_desc: "Нет ключей, нет платежей, нет ерунды. Просто вставляй и играй.", why_auto_title: "Автообновление", why_auto_desc: "Скрипт обновляется быстро — вы всегда получаете самые последние функции.", why_safe_title: "Андетект и Безопасность", why_safe_desc: "Продвинутый обход античита обеспечивают вашу безопасность.", why_all_title: "Всё в одном", why_all_desc: "Один скрипт для всех поддерживаемых игр — удобно и быстро", script_title: "Получите скрипт", script_note: "Единый скрипт для всех режимов — с автоматическими обновлениями.", btn_copy_script: "Копировать скрипт", games_title: "Поддерживаемые игры", faq_title: "Часто задаваемые вопросы", faq_q1: "Какие экзекьюторы поддерживает хаб?", faq_a1: "Мы успешно протестировали: Zenit, Volcano, Terra, Bunni.lol, Seliware, Valex, Potassium, Wave, Velocity, Sirhurt, и Nucleus. Все работают стабильно.", faq_q2: "Насколько безопасен ваш хаб?", faq_a2: "Наш хаб на 101% безопасен. Он протестирован временем и пользуется доверием большой аудитории пользователей.", faq_q3: "Каков риск получить бан?", faq_a3: "Риск минимален. Наш хаб оснащён мощным обходом античита, что делает вероятность бана практически нулевой.", faq_q4: "Где можно получить поддержку или связаться с вами?", faq_a4: "У нас есть активные сообщества в Discord и Telegram, где вы можете задавать вопросы, получать поддержку или просто общаться с другими пользователями.", faq_q5: "Ваш хаб без ключа?", faq_a5: "Да! Наш хаб полностью без ключа и всегда будет таким. Никаких платежей, никаких ключей — только бесплатный доступ для всех." }
+        };
+        let currentLang = 'en';
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) el.textContent = translations[lang][key];
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+        }
+        document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
+        // Снежинки
+        const snowflakesContainer = document.querySelector('.snowflakes');
+        for (let i = 0; i < 90; i++) {
+            const s = document.createElement('div');
+            s.classList.add('snowflake');
+            s.textContent = ['❅','❆','✻','✽','❄'][Math.floor(Math.random()*5)];
+            s.style.left = Math.random()*100 + 'vw';
+            s.style.animationDuration = Math.random()*10 + 8 + 's';
+            s.style.fontSize = Math.random()*15 + 10 + 'px';
+            s.style.animationDelay = Math.random()*10 + 's';
+            snowflakesContainer.appendChild(s);
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => document.querySelector('.loading').classList.add('hidden'), 1800);
+            const revealElements = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver(e => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); }), { threshold: 0.1 });
+            revealElements.forEach(el => observer.observe(el));
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            class Particle {
+                constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = (Math.random() - 0.5) * 0.7; this.vy = (Math.random() - 0.5) * 0.7; this.radius = Math.random() * 2.5 + 1; }
+                update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > canvas.width) this.vx *= -1; if (this.y < 0 || this.y > canvas.height) this.vy *= -1; }
+                draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,60,92,0.8)'; ctx.fill(); }
+            }
+            function initParticles() { particles = []; for (let i = 0; i < 100; i++) particles.push(new Particle()); }
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 120) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = 'rgba(255,60,92,0.15)'; ctx.lineWidth = 1; ctx.stroke(); }
+                }
+            }
+            function animate() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                particles.forEach(p => { p.update(); p.draw(); });
+                drawLines();
+                requestAnimationFrame(animate);
+            }
+            initParticles();
+            animate();
+            const gamesScroller = document.getElementById('games-scroller');
+            const scrollLeftBtn = document.getElementById('scroll-left');
+            const scrollRightBtn = document.getElementById('scroll-right');
+            const scrollAmount = 300;
+            if (scrollLeftBtn) scrollLeftBtn.onclick = () => gamesScroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            if (scrollRightBtn) scrollRightBtn.onclick = () => gamesScroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+        function toggleFaq(el) { el.closest('.faq-item').classList.toggle('active'); }
+        function copyScript() {
+            const text = document.getElementById('script-code').innerText.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.innerHTML = '<i class="fas fa-check"></i> ' + (currentLang === 'ru' ? 'Скопировано!' : 'Copied!');
+                btn.classList.add('copied');
+                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> ' + (currentLang === 'ru' ? 'Копировать скрипт' : 'Copy Script'); btn.classList.remove('copied'); }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
