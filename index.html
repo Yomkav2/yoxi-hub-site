@@ -180,14 +180,13 @@
             text-shadow: 0 0 15px rgba(230, 0, 35, 0.8);
         }
         .lang-switcher {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
             background: rgba(20, 20, 20, 0.7);
             padding: 0.3rem 0.7rem;
             border-radius: 18px;
             font-size: 0.9rem;
             font-weight: 600;
+            display: flex;
+            gap: 0.5rem;
         }
         .lang-btn {
             background: none;
@@ -202,6 +201,14 @@
         .lang-btn.active {
             color: var(--primary);
             background: rgba(230, 0, 35, 0.2);
+        }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
         }
         nav {
             display: flex;
@@ -511,7 +518,7 @@
             border-bottom: 1px solid var(--border-color);
             background-color: #0f0f0f;
             /* placeholder gradient while loading */
-            background-image: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            background-image: linear-gradient(135deg, rgba(230, 0, 35, 0.1), rgba(255, 60, 92, 0.05));
         }
         .game-card h3 {
             padding: 1rem;
@@ -522,7 +529,7 @@
         .scroller-wrapper {
             display: none;
         }
-        @media (max-width: 992px) {
+        @media (max-width: 991px) {
             .games-grid { display: none; }
             .scroller-wrapper { display: block; }
         }
@@ -560,6 +567,9 @@
             transform: translateY(-50%) scale(1.08);
             box-shadow: 0 0 20px rgba(230, 0, 35, 0.5);
             color: white;
+        }
+        @media (max-width: 767px) {
+            .scroll-btn-arrow { display: none; }
         }
         #scroll-left { left: 0; }
         #scroll-right { right: 0; }
@@ -601,6 +611,16 @@
             transform: translateY(-12px) scale(1.02);
             box-shadow: 0 12px 35px rgba(230, 0, 35, 0.3);
             border-color: var(--primary);
+        }
+        .game-card-scroller .game-image-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            margin-bottom: 0.8rem;
+        }
+        .game-card-scroller h3 {
+            font-size: 1rem;
+            text-align: center;
+            margin-top: 0.5rem;
         }
         .faq-container {
             max-width: 850px;
@@ -720,15 +740,53 @@
             opacity: 1;
             transform: translateY(0);
         }
+        
+        /* Mobile Menu */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            nav { 
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background: rgba(15, 15, 15, 0.95);
+                width: 100%;
+                height: calc(100vh - 70px);
+                padding: 2rem;
+                transition: left 0.4s ease;
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid var(--border-color);
+                z-index: 999;
+                gap: 1.5rem;
+                align-items: center;
+            }
+            nav.active { left: 0; }
+            nav a { font-size: 1.4rem; padding: 0.8rem 0; }
+            .lang-switcher { position: static; transform: none; margin-top: 1rem; }
+            
+            #welcome h1 { font-size: 2.4rem; }
+            .section-title { font-size: 2.2rem; }
+            .buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; }
+            .secret-btn { max-width: 300px; width: 100%; }
+            
+            .reasons-grid { grid-template-columns: 1fr; }
+            .faq-container { padding: 0; }
+            
+            .game-card-scroller { width: 150px; }
+            .game-card-scroller h3 { font-size: 0.9rem; }
+            .scroller-wrapper { padding: 0 10px; }
+        }
+        
         @media (min-width: 992px) {
             header { padding: 1.2rem 5%; }
             .logo { font-size: 2rem; }
             .section-title { font-size: 3.5rem; }
             #welcome h1 { font-size: 5.5rem; }
         }
-        @media (max-width: 767px) {
-            #welcome h1 { font-size: 2.8rem; }
-            .scroll-btn-arrow { display: none; }
+        
+        @media (max-width: 768px) {
+            .snowflakes { display: none; }
         }
     </style>
 </head>
@@ -737,7 +795,6 @@
     <div class="background"></div>
     <canvas id="particle-canvas"></canvas>
     <div class="grid-bg"></div>
-
     <div class="loading">
         <div class="loader-container">
             <div class="loader-logo">YOXI<span> HUB</span></div>
@@ -746,21 +803,22 @@
             </div>
         </div>
     </div>
-
     <header>
         <a href="#welcome" class="logo">YOXI<span> HUB</span></a>
         <div class="lang-switcher">
             <button class="lang-btn active" data-lang="en">EN</button>
             <button class="lang-btn" data-lang="ru">RU</button>
         </div>
-        <nav>
+        <button class="menu-toggle" id="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav id="main-nav">
             <a href="#why" data-key="nav_why">Why?</a>
             <a href="#script" data-key="nav_script">Script</a>
             <a href="#games" data-key="nav_games">Games</a>
             <a href="#faq" data-key="nav_faq">FAQ</a>
         </nav>
     </header>
-
     <main>
         <section id="welcome">
             <h1 data-key="hero_title">YOXI HUB</h1>
@@ -774,7 +832,6 @@
             <button class="secret-btn" onclick="window.open('https://www.youtube.com/watch?v=swnVdhCsYBk', '_blank')">DAAAAMMNN</button>
             <a href="#why" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
         </section>
-
         <section id="why">
             <h2 class="section-title reveal" data-key="why_title">Why YOXI HUB?</h2>
             <div class="reasons-grid">
@@ -784,7 +841,6 @@
                 <div class="reason-card reveal"><div class="reason-icon"><i class="fas fa-infinity"></i></div><h3 class="reason-title" data-key="why_all_title">All-in-One</h3><p class="reason-desc" data-key="why_all_desc">One script for all supported games — convenient and fast.</p></div>
             </div>
         </section>
-
         <section id="script">
             <h2 class="section-title reveal" data-key="script_title">Get The Script</h2>
             <div class="script-container reveal">
@@ -794,7 +850,6 @@
             </div>
             <a href="#games" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
         </section>
-
         <section id="games">
             <h2 class="section-title reveal" data-key="games_title">Supported Games</h2>
             <div class="games-grid reveal">
@@ -816,7 +871,6 @@
                 <div class="game-card" data-gameid="136801880565837"><div class="game-image-wrapper"></div><h3>FLICK</h3></div>
                 <div class="game-card" data-gameid="115461597548550"><div class="game-image-wrapper"></div><h3>NFT BATTLE</h3></div>
             </div>
-
             <div class="scroller-wrapper reveal">
                 <button class="scroll-btn-arrow" id="scroll-left"><i class="fas fa-chevron-left"></i></button>
                 <div class="games-scroller" id="games-scroller">
@@ -844,7 +898,6 @@
             </div>
             <a href="#faq" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
         </section>
-
         <section id="faq">
             <h2 class="section-title reveal" data-key="faq_title">Frequently Asked Questions</h2>
             <div class="faq-container">
@@ -856,7 +909,6 @@
             </div>
         </section>
     </main>
-
     <footer>
         <div class="social-links">
             <a href="https://t.me/YomkaMadeIt" target="_blank" aria-label="Telegram" class="telegram"><i class="fab fa-telegram"></i></a>
@@ -865,7 +917,6 @@
         </div>
         <p class="copyright">© 2025 YOXI HUB ❄️ Happy New Year!</p>
     </footer>
-
     <script>
         const translations = {
             en: { hero_title: "YOXI HUB", hero_subtitle: "The ultimate free script compatible with most executors and popular games.", nav_why: "Why?", nav_script: "Script", nav_games: "Games", nav_faq: "FAQ", btn_telegram: "Telegram", btn_discord: "Discord", btn_youtube: "YouTube", btn_get_script: "Get Script", why_title: "Why YOXI HUB?", why_keyless_title: "100% Keyless", why_keyless_desc: "No keys, no payments, no bullshit. Just paste and play.", why_auto_title: "Auto-Updating", why_auto_desc: "The script is updated quickly, so you always get the latest features.", why_safe_title: "Safe & Undetected", why_safe_desc: "Advanced Anti-cheat bypass keep you safe.", why_all_title: "All-in-One", why_all_desc: "One script for all supported games — convenient and fast.", script_title: "Get The Script", script_note: "Single script for all modes — auto-updates included.", btn_copy_script: "Copy Script", games_title: "Supported Games", faq_title: "Frequently Asked Questions", faq_q1: "What executors does the hub support?", faq_a1: "We conducted successful tests on: Zenit, Volcano, Terra, Bunni.lol, Seliware, Valex, Potassium, Wave, Velocity, Sirhurt, and Nucleus. All worked stably.", faq_q2: "How secure is your hub?", faq_a2: "Our hub is 101% safe. It has been tested over time and is trusted by a large community of users.", faq_q3: "What is the risk of getting banned?", faq_a3: "The risk is minimal. Our hub features a powerful anti-cheat bypass, making the probability of a ban nearly zero.", faq_q4: "Where can I get support or contact you?", faq_a4: "We have active communities on Discord and Telegram where you can ask questions, get support, or just chat with other users.", faq_q5: "Is your hub keyless?", faq_a5: "Yes! Our hub is completely keyless and always will be. No payments, no keys — just free access for everyone." },
@@ -881,116 +932,205 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
         }
         document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
-
+        
+        const menuToggle = document.getElementById('menu-toggle');
+        const mainNav = document.getElementById('main-nav');
+        
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+            menuToggle.querySelector('i').className = mainNav.classList.contains('active') 
+                ? 'fas fa-times' 
+                : 'fas fa-bars';
+        });
+        
+        document.querySelectorAll('#main-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fas fa-bars';
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (mainNav.classList.contains('active') && 
+                !mainNav.contains(e.target) && 
+                !menuToggle.contains(e.target)) {
+                mainNav.classList.remove('active');
+                menuToggle.querySelector('i').className = 'fas fa-bars';
+            }
+        });
+        
+        // Снежинки
         const snowflakesContainer = document.querySelector('.snowflakes');
-        for (let i = 0; i < 90; i++) {
+        for (let i = 0; i < 60; i++) {
             const s = document.createElement('div');
             s.classList.add('snowflake');
             s.textContent = ['❅','❆','✻','✽','❄'][Math.floor(Math.random()*5)];
             s.style.left = Math.random()*100 + 'vw';
             s.style.animationDuration = Math.random()*10 + 8 + 's';
-            s.style.fontSize = Math.random()*15 + 10 + 'px';
+            s.style.fontSize = Math.random()*10 + 8 + 'px';
             s.style.animationDelay = Math.random()*10 + 's';
             snowflakesContainer.appendChild(s);
         }
-
+        
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => document.querySelector('.loading').classList.add('hidden'), 1800);
-
             const revealElements = document.querySelectorAll('.reveal');
-            const observer = new IntersectionObserver(e => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); }), { threshold: 0.1 });
+            const observer = new IntersectionObserver(e => e.forEach(en => { 
+                if (en.isIntersecting) en.target.classList.add('visible'); 
+            }), { threshold: 0.1 });
             revealElements.forEach(el => observer.observe(el));
-
+            
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
-            function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            
+            function resizeCanvas() { 
+                canvas.width = window.innerWidth; 
+                canvas.height = window.innerHeight; 
+            }
             resizeCanvas();
             window.addEventListener('resize', resizeCanvas);
+            
             class Particle {
-                constructor() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.vx = (Math.random() - 0.5) * 0.7; this.vy = (Math.random() - 0.5) * 0.7; this.radius = Math.random() * 2.5 + 1; }
-                update() { this.x += this.vx; this.y += this.vy; if (this.x < 0 || this.x > canvas.width) this.vx *= -1; if (this.y < 0 || this.y > canvas.height) this.vy *= -1; }
-                draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); ctx.fillStyle = 'rgba(255,60,92,0.8)'; ctx.fill(); }
-            }
-            function initParticles() { particles = []; for (let i = 0; i < 100; i++) particles.push(new Particle()); }
-            function drawLines() {
-                for (let i = 0; i < particles.length; i++) for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y, dist = Math.sqrt(dx*dx + dy*dy);
-                    if (dist < 120) { ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y); ctx.strokeStyle = 'rgba(255,60,92,0.15)'; ctx.lineWidth = 1; ctx.stroke(); }
+                constructor() { 
+                    this.x = Math.random() * canvas.width; 
+                    this.y = Math.random() * canvas.height; 
+                    this.vx = (Math.random() - 0.5) * 0.7; 
+                    this.vy = (Math.random() - 0.5) * 0.7; 
+                    this.radius = Math.random() * 1.5 + 0.5;
+                }
+                update() { 
+                    this.x += this.vx; 
+                    this.y += this.vy; 
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1; 
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1; 
+                }
+                draw() { 
+                    ctx.beginPath(); 
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2); 
+                    ctx.fillStyle = 'rgba(255,60,92,0.6)';
+                    ctx.fill(); 
                 }
             }
+            
+            function initParticles() { 
+                particles = []; 
+                const particleCount = window.innerWidth > 768 ? 80 : 40;
+                for (let i = 0; i < particleCount; i++) particles.push(new Particle()); 
+            }
+            
+            function drawLines() {
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx*dx + dy*dy);
+                        if (dist < 80) {
+                            ctx.beginPath(); 
+                            ctx.moveTo(particles[i].x, particles[i].y); 
+                            ctx.lineTo(particles[j].x, particles[j].y); 
+                            ctx.strokeStyle = 'rgba(255,60,92,0.08)';
+                            ctx.lineWidth = 1; 
+                            ctx.stroke(); 
+                        }
+                    }
+                }
+            }
+            
             function animate() {
                 ctx.clearRect(0,0,canvas.width,canvas.height);
-                particles.forEach(p => { p.update(); p.draw(); });
+                particles.forEach(p => { 
+                    p.update(); 
+                    p.draw(); 
+                });
                 drawLines();
                 requestAnimationFrame(animate);
             }
+            
             initParticles();
             animate();
-
+            
             const gamesScroller = document.getElementById('games-scroller');
             const scrollLeftBtn = document.getElementById('scroll-left');
             const scrollRightBtn = document.getElementById('scroll-right');
             const scrollAmount = 300;
-            if (scrollLeftBtn) scrollLeftBtn.onclick = () => gamesScroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            if (scrollRightBtn) scrollRightBtn.onclick = () => gamesScroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-
+            
+            if (scrollLeftBtn && scrollRightBtn) {
+                scrollLeftBtn.onclick = () => gamesScroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                scrollRightBtn.onclick = () => gamesScroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+            
             loadRobloxThumbnails();
+            
+            window.addEventListener('resize', () => {
+                initParticles();
+                resizeCanvas();
+            });
         });
-
-        function toggleFaq(el) { el.closest('.faq-item').classList.toggle('active'); }
+        
+        function toggleFaq(el) { 
+            const item = el.closest('.faq-item');
+            item.classList.toggle('active');
+        }
+        
         function copyScript() {
             const text = document.getElementById('script-code').innerText.trim();
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.getElementById('copy-btn');
                 btn.innerHTML = '<i class="fas fa-check"></i> ' + (currentLang === 'ru' ? 'Скопировано!' : 'Copied!');
                 btn.classList.add('copied');
-                setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> ' + (currentLang === 'ru' ? 'Копировать скрипт' : 'Copy Script'); btn.classList.remove('copied'); }, 2000);
+                setTimeout(() => { 
+                    btn.innerHTML = '<i class="fas fa-copy"></i> ' + (currentLang === 'ru' ? 'Копировать скрипт' : 'Copy Script'); 
+                    btn.classList.remove('copied'); 
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
             });
         }
-
+        
         function loadRobloxThumbnails() {
             const elements = Array.from(document.querySelectorAll('[data-gameid]'));
             if (!elements.length) return;
-            // collect unique ids
+            
             const ids = [...new Set(elements.map(el => el.getAttribute('data-gameid')))];
-            const batchSize = 20;
-            const placeholder = "linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))";
-            function applyPlaceholderFor(id) {
+            const placeholder = "linear-gradient(135deg, rgba(230,0,35,0.15), rgba(255,60,92,0.08))";
+            
+            ids.forEach(id => {
                 document.querySelectorAll(`[data-gameid="${id}"] .game-image-wrapper`).forEach(w => {
                     w.style.backgroundImage = placeholder;
-                });
-            }
-            ids.forEach(id => applyPlaceholderFor(id));
-
-            const batches = [];
-            for (let i = 0; i < ids.length; i += batchSize) batches.push(ids.slice(i, i + batchSize));
-
-            batches.forEach(batch => {
-                const q = batch.join(',');
-                const url = `https://thumbnails.roblox.com/v1/games/icons?universeIds=${encodeURIComponent(q)}&size=768x432&format=Png&isCircular=false`;
-                fetch(url).then(r => r.json()).then(json => {
-                    if (!json || !Array.isArray(json.data)) {
-                        batch.forEach(id => applyPlaceholderFor(id));
-                        return;
-                    }
-                    json.data.forEach(item => {
-                        const targetId = String(item.targetId || item.universeId || item.id || item.assetId || "");
-                        const imageUrl = item.imageUrl || null;
-                        if (imageUrl) {
-                            document.querySelectorAll(`[data-gameid="${targetId}"] .game-image-wrapper`).forEach(w => {
-                                w.style.backgroundImage = `url('${imageUrl}')`;
-                                w.style.backgroundSize = 'cover';
-                                w.style.backgroundPosition = 'center';
-                            });
-                        } else {
-                            batch.forEach(id => applyPlaceholderFor(id));
-                        }
-                    });
-                }).catch(() => {
-                    batch.forEach(id => applyPlaceholderFor(id));
+                    w.style.backgroundColor = '#121212';
                 });
             });
+            
+            const url = `https://thumbnails.roblox.com/v1/games/multiget-place-thumbnails?placeIds=${encodeURIComponent(ids.join(','))}&size=512x288&format=Png&isCircular=false`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data) {
+                        data.data.forEach(game => {
+                            if (game.placeId && game.thumbnails && game.thumbnails[0]) {
+                                const imageUrl = game.thumbnails[0].imageUrl;
+                                document.querySelectorAll(`[data-gameid="${game.placeId}"] .game-image-wrapper`).forEach(wrapper => {
+                                    const img = new Image();
+                                    img.onload = function() {
+                                        wrapper.style.backgroundImage = `url('${imageUrl}')`;
+                                        wrapper.style.backgroundSize = 'cover';
+                                        wrapper.style.backgroundPosition = 'center';
+                                    };
+                                    img.onerror = function() {
+                                        // Keep placeholder if image fails to load
+                                        wrapper.style.backgroundImage = placeholder;
+                                    };
+                                    img.src = imageUrl;
+                                });
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading thumbnails:', error);
+                });
         }
     </script>
 </body>
