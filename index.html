@@ -495,7 +495,7 @@
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            box-shadow: 0 8px 25px rgba(0 trophies0, 0, 0, 0.4);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             transition: all 0.4s ease;
         }
         .game-card:hover {
@@ -509,6 +509,9 @@
             background-size: cover;
             background-position: center;
             border-bottom: 1px solid var(--border-color);
+            background-color: #0f0f0f;
+            /* placeholder gradient while loading */
+            background-image: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
         }
         .game-card h3 {
             padding: 1rem;
@@ -734,6 +737,7 @@
     <div class="background"></div>
     <canvas id="particle-canvas"></canvas>
     <div class="grid-bg"></div>
+
     <div class="loading">
         <div class="loader-container">
             <div class="loader-logo">YOXI<span> HUB</span></div>
@@ -742,6 +746,7 @@
             </div>
         </div>
     </div>
+
     <header>
         <a href="#welcome" class="logo">YOXI<span> HUB</span></a>
         <div class="lang-switcher">
@@ -755,6 +760,7 @@
             <a href="#faq" data-key="nav_faq">FAQ</a>
         </nav>
     </header>
+
     <main>
         <section id="welcome">
             <h1 data-key="hero_title">YOXI HUB</h1>
@@ -768,6 +774,7 @@
             <button class="secret-btn" onclick="window.open('https://www.youtube.com/watch?v=swnVdhCsYBk', '_blank')">DAAAAMMNN</button>
             <a href="#why" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
         </section>
+
         <section id="why">
             <h2 class="section-title reveal" data-key="why_title">Why YOXI HUB?</h2>
             <div class="reasons-grid">
@@ -777,6 +784,7 @@
                 <div class="reason-card reveal"><div class="reason-icon"><i class="fas fa-infinity"></i></div><h3 class="reason-title" data-key="why_all_title">All-in-One</h3><p class="reason-desc" data-key="why_all_desc">One script for all supported games — convenient and fast.</p></div>
             </div>
         </section>
+
         <section id="script">
             <h2 class="section-title reveal" data-key="script_title">Get The Script</h2>
             <div class="script-container reveal">
@@ -786,54 +794,57 @@
             </div>
             <a href="#games" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
         </section>
+
         <section id="games">
             <h2 class="section-title reveal" data-key="games_title">Supported Games</h2>
             <div class="games-grid reveal">
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9b7b7c8c8f8e4f8b9c8d8e8f9a0b1c2d/768/432/ImagePng');"></div><h3>Forsaken</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3e8f9a0b1c2d3e4f5g6h7i8j9k0l1m2n/768/432/ImagePng');"></div><h3>Evade</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p/768/432/ImagePng');"></div><h3>Bee Swarm Simulator</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u/768/432/ImagePng');"></div><h3>Grow a Garden</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p/768/432/ImagePng');"></div><h3>Dandy's World</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k/768/432/ImagePng');"></div><h3>Grace</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4k5l6m7n8o9p0q1r2s3t4u5v6w7x8y9z/768/432/ImagePng');"></div><h3>Pressure</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-7h8g9f0e1d2c3b4a5z6y7x8w9v0u1t2s/768/432/ImagePng');"></div><h3>Bubble Gum Simulator</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3p4o5i6u7y8t9r0e1w2q3a4s5d6f7g8h/768/432/ImagePng');"></div><h3>Die of Death</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9j8h7g6f5e4d3s2a1q0w9e8r7t6y5u4i/768/432/ImagePng');"></div><h3>Fish It!</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2m3n4b5v6c7x8z9a0s1d2f3g4h5j6k7l/768/432/ImagePng');"></div><h3>Hypershot</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-5t6y7u8i9o0p1q2w3e4r5t6y7u8i9o0p/768/432/ImagePng');"></div><h3>Arsenal</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1f2g3h4j5k6l7z8x9c0v1b2n3m4q5w6e/768/432/ImagePng');"></div><h3>Something Evil Will Happen</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8r9t0y1u2i3o4p5q6w7e8r9t0y1u2i3o/768/432/ImagePng');"></div><h3>Violence District</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4a5b6c7d8e9f0g1h2j3k4l5m6n7o8p9q/768/432/ImagePng');"></div><h3>Murder Mystery 2</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9q8w7e6r5t4y3u2i1o0p9l8k7j6h5g4f/768/432/ImagePng');"></div><h3>Flick</h3></div>
-                <div class="game-card"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3d4f5g6h7j8k9l0z1x2c3v4b5n6m7p8o/768/432/ImagePng');"></div><h3>NFT Battle</h3></div>
+                <div class="game-card" data-gameid="18687417158"><div class="game-image-wrapper"></div><h3>FORSAKEN</h3></div>
+                <div class="game-card" data-gameid="9872472334"><div class="game-image-wrapper"></div><h3>EVADE</h3></div>
+                <div class="game-card" data-gameid="1537690962"><div class="game-image-wrapper"></div><h3>BEE SWARM SIMULATOR</h3></div>
+                <div class="game-card" data-gameid="126884695634066"><div class="game-image-wrapper"></div><h3>GROW A GARDEN</h3></div>
+                <div class="game-card" data-gameid="16116270224"><div class="game-image-wrapper"></div><h3>DANDY'S WORLD</h3></div>
+                <div class="game-card" data-gameid="138837502355157"><div class="game-image-wrapper"></div><h3>GRACE</h3></div>
+                <div class="game-card" data-gameid="12411473842"><div class="game-image-wrapper"></div><h3>PRESSURE</h3></div>
+                <div class="game-card" data-gameid="85896571713843"><div class="game-image-wrapper"></div><h3>BUBBLE GUM SIMULATOR</h3></div>
+                <div class="game-card" data-gameid="71895508397153"><div class="game-image-wrapper"></div><h3>DIE OF DEATH</h3></div>
+                <div class="game-card" data-gameid="121864768012064"><div class="game-image-wrapper"></div><h3>FISH IT!</h3></div>
+                <div class="game-card" data-gameid="17516596118"><div class="game-image-wrapper"></div><h3>HYPERSHOT</h3></div>
+                <div class="game-card" data-gameid="286090429"><div class="game-image-wrapper"></div><h3>ARSENAL</h3></div>
+                <div class="game-card" data-gameid="16991287194"><div class="game-image-wrapper"></div><h3>SOMETHING EVIL WILL HAPPEN</h3></div>
+                <div class="game-card" data-gameid="93978595733734"><div class="game-image-wrapper"></div><h3>VIOLENCE DISTRICT</h3></div>
+                <div class="game-card" data-gameid="142823291"><div class="game-image-wrapper"></div><h3>MURDER MYSTERY 2</h3></div>
+                <div class="game-card" data-gameid="136801880565837"><div class="game-image-wrapper"></div><h3>FLICK</h3></div>
+                <div class="game-card" data-gameid="115461597548550"><div class="game-image-wrapper"></div><h3>NFT BATTLE</h3></div>
             </div>
+
             <div class="scroller-wrapper reveal">
                 <button class="scroll-btn-arrow" id="scroll-left"><i class="fas fa-chevron-left"></i></button>
                 <div class="games-scroller" id="games-scroller">
                     <div class="scroller__inner">
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9b7b7c8c8f8e4f8b9c8d8e8f9a0b1c2d/768/432/ImagePng');"></div><h3>Forsaken</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3e8f9a0b1c2d3e4f5g6h7i8j9k0l1m2n/768/432/ImagePng');"></div><h3>Evade</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2a3b4c5d6e7f8g9h0i1j2k3l4m5n6o7p/768/432/ImagePng');"></div><h3>Bee Swarm Simulator</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8f7g6h5i4j3k2l1m0n9o8p7q6r5s4t3u/768/432/ImagePng');"></div><h3>Grow a Garden</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p/768/432/ImagePng');"></div><h3>Dandy's World</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9z8y7x6w5v4u3t2s1r0q9p8o7n6m5l4k/768/432/ImagePng');"></div><h3>Grace</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4k5l6m7n8o9p0q1r2s3t4u5v6w7x8y9z/768/432/ImagePng');"></div><h3>Pressure</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-7h8g9f0e1d2c3b4a5z6y7x8w9v0u1t2s/768/432/ImagePng');"></div><h3>Bubble Gum Simulator</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3p4o5i6u7y8t9r0e1w2q3a4s5d6f7g8h/768/432/ImagePng');"></div><h3>Die of Death</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9j8h7g6f5e4d3s2a1q0w9e8r7t6y5u4i/768/432/ImagePng');"></div><h3>Fish It!</h3></div>
-                        <div class="game-card-scroller"><div class="game június-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-2m3n4b5v6c7x8z9a0s1d2f3g4h5j6k7l/768/432/ImagePng');"></div><h3>Hypershot</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-5t6y7u8i9o0p1q2w3e4r5t6y7u8i9o0p/768/432/ImagePng');"></div><h3>Arsenal</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-1f2g3h4j5k6l7z8x9c0v1b2n3m4q5w6e/768/432/ImagePng');"></div><h3>Something Evil Will Happen</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-8r9t0y1u2i3o4p5q6w7e8r9t0y1u2i3o/768/432/ImagePng');"></div><h3>Violence District</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-4a5b6c7d8e9f0g1h2j3k4l5m6n7o8p9q/768/432/ImagePng');"></div><h3>Murder Mystery 2</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-9q8w7e6r5t4y3u2i1o0p9l8k7j6h5g4f/768/432/ImagePng');"></div><h3>Flick</h3></div>
-                        <div class="game-card-scroller"><div class="game-image-wrapper" style="background-image: url('https://tr.rbxcdn.com/180DAY-3d4f5g6h7j8k9l0z1x2c3v4b5n6m7p8o/768/432/ImagePng');"></div><h3>NFT Battle</h3></div>
+                        <div class="game-card-scroller" data-gameid="18687417158"><div class="game-image-wrapper"></div><h3>FORSAKEN</h3></div>
+                        <div class="game-card-scroller" data-gameid="9872472334"><div class="game-image-wrapper"></div><h3>EVADE</h3></div>
+                        <div class="game-card-scroller" data-gameid="1537690962"><div class="game-image-wrapper"></div><h3>BEE SWARM SIMULATOR</h3></div>
+                        <div class="game-card-scroller" data-gameid="126884695634066"><div class="game-image-wrapper"></div><h3>GROW A GARDEN</h3></div>
+                        <div class="game-card-scroller" data-gameid="16116270224"><div class="game-image-wrapper"></div><h3>DANDY'S WORLD</h3></div>
+                        <div class="game-card-scroller" data-gameid="138837502355157"><div class="game-image-wrapper"></div><h3>GRACE</h3></div>
+                        <div class="game-card-scroller" data-gameid="12411473842"><div class="game-image-wrapper"></div><h3>PRESSURE</h3></div>
+                        <div class="game-card-scroller" data-gameid="85896571713843"><div class="game-image-wrapper"></div><h3>BUBBLE GUM SIMULATOR</h3></div>
+                        <div class="game-card-scroller" data-gameid="71895508397153"><div class="game-image-wrapper"></div><h3>DIE OF DEATH</h3></div>
+                        <div class="game-card-scroller" data-gameid="121864768012064"><div class="game-image-wrapper"></div><h3>FISH IT!</h3></div>
+                        <div class="game-card-scroller" data-gameid="17516596118"><div class="game-image-wrapper"></div><h3>HYPERSHOT</h3></div>
+                        <div class="game-card-scroller" data-gameid="286090429"><div class="game-image-wrapper"></div><h3>ARSENAL</h3></div>
+                        <div class="game-card-scroller" data-gameid="16991287194"><div class="game-image-wrapper"></div><h3>SOMETHING EVIL WILL HAPPEN</h3></div>
+                        <div class="game-card-scroller" data-gameid="93978595733734"><div class="game-image-wrapper"></div><h3>VIOLENCE DISTRICT</h3></div>
+                        <div class="game-card-scroller" data-gameid="142823291"><div class="game-image-wrapper"></div><h3>MURDER MYSTERY 2</h3></div>
+                        <div class="game-card-scroller" data-gameid="136801880565837"><div class="game-image-wrapper"></div><h3>FLICK</h3></div>
+                        <div class="game-card-scroller" data-gameid="115461597548550"><div class="game-image-wrapper"></div><h3>NFT BATTLE</h3></div>
                     </div>
                 </div>
                 <button class="scroll-btn-arrow" id="scroll-right"><i class="fas fa-chevron-right"></i></button>
             </div>
             <a href="#faq" class="scroll-down"><i class="fas fa-chevron-down"></i></a>
         </section>
+
         <section id="faq">
             <h2 class="section-title reveal" data-key="faq_title">Frequently Asked Questions</h2>
             <div class="faq-container">
@@ -845,6 +856,7 @@
             </div>
         </section>
     </main>
+
     <footer>
         <div class="social-links">
             <a href="https://t.me/YomkaMadeIt" target="_blank" aria-label="Telegram" class="telegram"><i class="fab fa-telegram"></i></a>
@@ -853,6 +865,7 @@
         </div>
         <p class="copyright">© 2025 YOXI HUB ❄️ Happy New Year!</p>
     </footer>
+
     <script>
         const translations = {
             en: { hero_title: "YOXI HUB", hero_subtitle: "The ultimate free script compatible with most executors and popular games.", nav_why: "Why?", nav_script: "Script", nav_games: "Games", nav_faq: "FAQ", btn_telegram: "Telegram", btn_discord: "Discord", btn_youtube: "YouTube", btn_get_script: "Get Script", why_title: "Why YOXI HUB?", why_keyless_title: "100% Keyless", why_keyless_desc: "No keys, no payments, no bullshit. Just paste and play.", why_auto_title: "Auto-Updating", why_auto_desc: "The script is updated quickly, so you always get the latest features.", why_safe_title: "Safe & Undetected", why_safe_desc: "Advanced Anti-cheat bypass keep you safe.", why_all_title: "All-in-One", why_all_desc: "One script for all supported games — convenient and fast.", script_title: "Get The Script", script_note: "Single script for all modes — auto-updates included.", btn_copy_script: "Copy Script", games_title: "Supported Games", faq_title: "Frequently Asked Questions", faq_q1: "What executors does the hub support?", faq_a1: "We conducted successful tests on: Zenit, Volcano, Terra, Bunni.lol, Seliware, Valex, Potassium, Wave, Velocity, Sirhurt, and Nucleus. All worked stably.", faq_q2: "How secure is your hub?", faq_a2: "Our hub is 101% safe. It has been tested over time and is trusted by a large community of users.", faq_q3: "What is the risk of getting banned?", faq_a3: "The risk is minimal. Our hub features a powerful anti-cheat bypass, making the probability of a ban nearly zero.", faq_q4: "Where can I get support or contact you?", faq_a4: "We have active communities on Discord and Telegram where you can ask questions, get support, or just chat with other users.", faq_q5: "Is your hub keyless?", faq_a5: "Yes! Our hub is completely keyless and always will be. No payments, no keys — just free access for everyone." },
@@ -868,7 +881,7 @@
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
         }
         document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
-        // Снежинки
+
         const snowflakesContainer = document.querySelector('.snowflakes');
         for (let i = 0; i < 90; i++) {
             const s = document.createElement('div');
@@ -880,11 +893,14 @@
             s.style.animationDelay = Math.random()*10 + 's';
             snowflakesContainer.appendChild(s);
         }
+
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => document.querySelector('.loading').classList.add('hidden'), 1800);
+
             const revealElements = document.querySelectorAll('.reveal');
             const observer = new IntersectionObserver(e => e.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); }), { threshold: 0.1 });
             revealElements.forEach(el => observer.observe(el));
+
             const canvas = document.getElementById('particle-canvas');
             const ctx = canvas.getContext('2d');
             let particles = [];
@@ -911,13 +927,17 @@
             }
             initParticles();
             animate();
+
             const gamesScroller = document.getElementById('games-scroller');
             const scrollLeftBtn = document.getElementById('scroll-left');
             const scrollRightBtn = document.getElementById('scroll-right');
             const scrollAmount = 300;
             if (scrollLeftBtn) scrollLeftBtn.onclick = () => gamesScroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             if (scrollRightBtn) scrollRightBtn.onclick = () => gamesScroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+
+            loadRobloxThumbnails();
         });
+
         function toggleFaq(el) { el.closest('.faq-item').classList.toggle('active'); }
         function copyScript() {
             const text = document.getElementById('script-code').innerText.trim();
@@ -926,6 +946,50 @@
                 btn.innerHTML = '<i class="fas fa-check"></i> ' + (currentLang === 'ru' ? 'Скопировано!' : 'Copied!');
                 btn.classList.add('copied');
                 setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> ' + (currentLang === 'ru' ? 'Копировать скрипт' : 'Copy Script'); btn.classList.remove('copied'); }, 2000);
+            });
+        }
+
+        function loadRobloxThumbnails() {
+            const elements = Array.from(document.querySelectorAll('[data-gameid]'));
+            if (!elements.length) return;
+            // collect unique ids
+            const ids = [...new Set(elements.map(el => el.getAttribute('data-gameid')))];
+            const batchSize = 20;
+            const placeholder = "linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))";
+            function applyPlaceholderFor(id) {
+                document.querySelectorAll(`[data-gameid="${id}"] .game-image-wrapper`).forEach(w => {
+                    w.style.backgroundImage = placeholder;
+                });
+            }
+            ids.forEach(id => applyPlaceholderFor(id));
+
+            const batches = [];
+            for (let i = 0; i < ids.length; i += batchSize) batches.push(ids.slice(i, i + batchSize));
+
+            batches.forEach(batch => {
+                const q = batch.join(',');
+                const url = `https://thumbnails.roblox.com/v1/games/icons?universeIds=${encodeURIComponent(q)}&size=768x432&format=Png&isCircular=false`;
+                fetch(url).then(r => r.json()).then(json => {
+                    if (!json || !Array.isArray(json.data)) {
+                        batch.forEach(id => applyPlaceholderFor(id));
+                        return;
+                    }
+                    json.data.forEach(item => {
+                        const targetId = String(item.targetId || item.universeId || item.id || item.assetId || "");
+                        const imageUrl = item.imageUrl || null;
+                        if (imageUrl) {
+                            document.querySelectorAll(`[data-gameid="${targetId}"] .game-image-wrapper`).forEach(w => {
+                                w.style.backgroundImage = `url('${imageUrl}')`;
+                                w.style.backgroundSize = 'cover';
+                                w.style.backgroundPosition = 'center';
+                            });
+                        } else {
+                            batch.forEach(id => applyPlaceholderFor(id));
+                        }
+                    });
+                }).catch(() => {
+                    batch.forEach(id => applyPlaceholderFor(id));
+                });
             });
         }
     </script>
