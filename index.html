@@ -983,62 +983,35 @@
                 setTimeout(() => { btn.innerHTML = '<i class="fas fa-copy"></i> ' + (currentLang === 'ru' ? 'Копировать скрипт' : 'Copy Script'); btn.classList.remove('copied'); }, 2000);
             });
         }
-        async function loadRobloxThumbnails() {
-            const elements = Array.from(document.querySelectorAll('[data-placeid]'));
-            if (!elements.length) return;
-            const placeIds = [...new Set(elements.map(el => el.getAttribute('data-placeid')))];
-            const placeholder = "linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))";
-            function applyPlaceholderFor(placeId) {
-                document.querySelectorAll(`[data-placeid="${placeId}"] .game-image-wrapper`).forEach(w => {
-                    w.style.backgroundImage = placeholder;
+function loadRobloxThumbnails() {
+            const gameIcons = {
+                '18687417158': 'https://tr.rbxcdn.com/180DAY-9a1fe823aecce4dc1fb466e7b038150a/512/512/Image/Webp/noFilter',
+                '9872472334': 'https://tr.rbxcdn.com/180DAY-c3d3d88a9374e6d3c72e0b651548a36c/768/432/Image/Webp/noFilter',
+                '1537690962': 'https://tr.rbxcdn.com/180DAY-986f7d1ef380e9385e5c8129268fb4c3/768/432/Image/Webp/noFilter',
+                '1268846956': 'https://tr.rbxcdn.com/180DAY-781c7a53c12d3738b553fc2cdff628ba/768/432/Image/Webp/noFilter',
+                '16116270224': 'https://tr.rbxcdn.com/180DAY-7be47d5ba72ab7e361b71cc2ea6817d3/768/432/Image/Webp/noFilter',
+                '1388375023': 'https://tr.rbxcdn.com/180DAY-18da528142177f8a8bd8f5b32783027e/768/432/Image/Webp/noFilter',
+                '12411473842': 'https://tr.rbxcdn.com/180DAY-e3e622f6507d1d26388b12b96c04ba46/768/432/Image/Webp/noFilter',
+                '2512643572': 'https://tr.rbxcdn.com/180DAY-c2da9dc4eb8d67203024379b618e6b10/768/432/Image/Webp/noFilter',
+                '7189550839': 'https://tr.rbxcdn.com/180DAY-adc24ee89b21e51e840f0690961cc3c1/768/432/Image/Webp/noFilter',
+                '12186476801': 'https://tr.rbxcdn.com/180DAY-7525bb5095e85204e6d9a7dbb21007ca/768/432/Image/Webp/noFilter',
+                '17516596118': 'https://tr.rbxcdn.com/180DAY-68638dcc26b07007314d0fa4bffb4019/768/432/Image/Webp/noFilter',
+                '286090429': 'https://tr.rbxcdn.com/180DAY-15a02279fcaaae8b498cd6adc250aca9/768/432/Image/Webp/noFilter',
+                '16991287194': 'https://tr.rbxcdn.com/180DAY-b338f34501459b207d4b8592f3b3dbe9/768/432/Image/Webp/noFilter',
+                '9397859573': 'https://tr.rbxcdn.com/180DAY-e86d0573b859b481c6f2734cb01398f2/768/432/Image/Webp/noFilter',
+                '142823291': 'https://tr.rbxcdn.com/180DAY-cee6edfb36f7c1d81e9ab0729d084de5/768/432/Image/Webp/noFilter',
+                '13680188056': 'https://tr.rbxcdn.com/180DAY-2818b4b2e6cf300f347d14684a58af9e/768/432/Image/Webp/noFilter',
+                '11546159754': 'https://tr.rbxcdn.com/180DAY-002db4795abf5bb36f6476d71712e841/768/432/Image/Webp/noFilter'
+            };
+            
+            Object.entries(gameIcons).forEach(([placeId, iconUrl]) => {
+                document.querySelectorAll(`[data-placeid="${placeId}"] .game-image-wrapper`).forEach(wrapper => {
+                    wrapper.style.backgroundImage = `url('${iconUrl}')`;
+                    wrapper.style.backgroundSize = 'cover';
+                    wrapper.style.backgroundPosition = 'center';
                 });
-            }
-            placeIds.forEach(id => applyPlaceholderFor(id));
-            const universeMap = new Map();
-            await Promise.all(placeIds.map(async (placeId) => {
-                try {
-                    const response = await fetch(`https://api.roblox.com/universes/get-universe-containing-place?placeid=${placeId}`);
-                    const data = await response.json();
-                    if (data.UniverseId) {
-                        universeMap.set(placeId, data.UniverseId);
-                    }
-                } catch (error) {
-                    console.error(`Failed to fetch universe ID for place ${placeId}:`, error);
-                }
-            }));
-            const universeIds = Array.from(universeMap.values());
-            const batchSize = 20;
-            const batches = [];
-            for (let i = 0; i < universeIds.length; i += batchSize) {
-                batches.push(universeIds.slice(i, i + batchSize));
-            }
-            batches.forEach(async (batch) => {
-                const q = batch.join(',');
-                const url = `https://thumbnails.roblox.com/v1/games/icons?universeIds=${encodeURIComponent(q)}&size=768x432&format=Png&isCircular=false`;
-                try {
-                    const response = await fetch(url);
-                    const json = await response.json();
-                    if (json && Array.isArray(json.data)) {
-                        json.data.forEach(item => {
-                            const universeId = item.targetId;
-                            const imageUrl = item.imageUrl || null;
-                            if (imageUrl) {
-                                const placeId = [...universeMap.entries()].find(([p, u]) => u === universeId)?.[0];
-                                if (placeId) {
-                                    document.querySelectorAll(`[data-placeid="${placeId}"] .game-image-wrapper`).forEach(w => {
-                                        w.style.backgroundImage = `url('${imageUrl}')`;
-                                        w.style.backgroundSize = 'cover';
-                                        w.style.backgroundPosition = 'center';
-                                    });
-                                }
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch thumbnails:', error);
-                }
             });
-        }
+        }   
     </script>
 </body>
 </html>
