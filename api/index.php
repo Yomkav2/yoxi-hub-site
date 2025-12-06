@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+$body = file_get_contents(__DIR__.'/real_script.lua'); // или просто 'print("hello")'
+header('Content-Type: text/plain; charset=utf-8');
+header('Content-Length: ' . strlen($body));
+header('Connection: close');
+header('Cache-Control: no-cache, no-store, must-revalidate');
+echo $body;
+
 
 $requiredAgentPart = 'Roblox';
 $blockList = ['curl', 'wget', 'python'];
