@@ -53,7 +53,7 @@ export default async function handler(req, res) {
     try {
         console.log(`[${timestamp}] [SUCCESS] IP: ${ip} | Token: ${token.substring(0, 8)}...`);
         
-        const scriptURL = 'https://raw.githubusercontent.com/Yomkav2/YOXI-HUB/main/loader';
+        const scriptURL = 'https://raw.githubusercontent.com/erxsethis/yoxi-hub-site/refs/heads/main/api/main_script';
         
         const response = await fetch(scriptURL);
         
