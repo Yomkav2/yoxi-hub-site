@@ -1,5 +1,15 @@
 {
-  "rewrites": [
-    { "source": "/script", "destination": "/api/script.php" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.php",
+      "use": "@vercel/php"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/script",
+      "dest": "/api/index.php"
+    }
   ]
 }
