@@ -1,14 +1,13 @@
 <?php
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $ip = $_SERVER['REMOTE_ADDR'];
-$isRoblox = (
-    strpos($userAgent, 'Roblox') !== false &&
+$isAllowed = (
     strpos($userAgent, 'curl') === false &&
     strpos($userAgent, 'wget') === false &&
     strpos($userAgent, 'Python') === false
 );
 $hasValidToken = isset($_GET['token']) && preg_match('/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i', $_GET['token']);
-if ($isRoblox && $hasValidToken) {
+if ($isAllowed && $hasValidToken) {
     file_put_contents('access.log', date('[Y-m-d H:i:s]') . " IP: $ip | UA: $userAgent | Token: {$_GET['token']}\n", FILE_APPEND);
     header('Content-Type: text/plain; charset=utf-8');
     header('Cache-Control: no-cache, no-store, must-revalidate');
